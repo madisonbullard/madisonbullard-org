@@ -26,7 +26,7 @@ function metaball(id: string) {
     [92, 798],
   ];
 
-  const handle_len_rate = 2.4;
+  const handle_len_rate = 2.5;
   const circlePaths: paper.Path.Circle[] = [];
   const radius = 50;
   for (let i = 0, l = ballPositions.length; i < l; i++) {
@@ -140,8 +140,7 @@ function getMetaball(
     closed: true,
   });
 
-  const segments = path.segments;
-  const [seg0, seg1, seg2, seg3] = segments;
+  const [seg0, seg1, seg2, seg3] = path.segments;
   if (seg0 && seg1 && seg2 && seg3) {
     seg0.handleOut = getVector(angle1a - pi2, radius1);
     seg1.handleIn = getVector(angle2a + pi2, radius2);
@@ -151,7 +150,6 @@ function getMetaball(
   return path;
 }
 
-// ------------------------------------------------
 function getVector(radians: number, length: number) {
   return new paper.Point({
     // Convert radians to degrees:
