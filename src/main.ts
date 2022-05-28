@@ -1,6 +1,6 @@
 import "./style.css";
 
-import * as paper from "paper";
+import metaball from "./canvas/metaball";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -12,10 +12,4 @@ app.innerHTML = /*html*/ `
   <canvas id="canvas"></canvas>
 `;
 
-paper.setup("canvas");
-
-new paper.Path.Circle({
-  center: paper.view.center,
-  radius: 50,
-  fillColor: "orange",
-});
+metaball("canvas");

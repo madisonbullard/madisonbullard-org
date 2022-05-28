@@ -17,6 +17,8 @@
     "sourceType": "module"
   },
   "rules": {
-    "no-unused-vars": "warn"
+    // covered by typescript
+    "no-unused-vars": "off",
+    "@typescript-eslint/ban-ts-comment": "warn"
   }
 }
