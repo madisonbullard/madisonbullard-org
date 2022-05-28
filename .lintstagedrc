@@ -1,5 +1,0 @@
-{
-  "**/*.ts": "pnpm type-check",
-  "**/*.(ts|js)": "pnpm lint --cache --fix .",
-  "**/*.{js,ts,css,md}": "prettier --write"
-}
