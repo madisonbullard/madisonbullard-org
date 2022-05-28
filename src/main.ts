@@ -1,7 +1,9 @@
 import "./style.css";
 
-import setupCanvas from "./canvas/setupCanvas";
+import setupPaper from "./canvas/setupPaper";
+import metaball from "./canvas/metaball";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
-setupCanvas(app);
+setupPaper(app);
+metaball();

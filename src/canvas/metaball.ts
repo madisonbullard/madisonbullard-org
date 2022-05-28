@@ -1,10 +1,8 @@
 import * as paper from "paper";
 
-function metaball(id: string) {
+function metaball() {
   // Ported from original Metaball script by SATO Hiroyuki
   // http://park12.wakwak.com/~shp/lc/et/en_aics_script.html
-
-  paper.setup(id);
 
   paper.project.currentStyle = {
     ...paper.project.currentStyle,
