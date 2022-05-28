@@ -26,7 +26,7 @@ function metaball(id: string) {
     [92, 798],
   ];
 
-  const handle_len_rate = 2.5;
+  const handle_len_rate = 2.45;
   const circlePaths: paper.Path.Circle[] = [];
   const radius = 50;
   for (let i = 0, l = ballPositions.length; i < l; i++) {
