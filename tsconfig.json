@@ -26,5 +26,5 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
-  "include": ["src"]
+  "include": ["src", "lint-staged.config.js"]
 }
