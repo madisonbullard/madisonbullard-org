@@ -1,0 +1,4 @@
+{
+  "**/*.ts?(x)": "pnpm type-check",
+  "**/*.(ts|js)?(x)": "pnpm lint ."
+}
