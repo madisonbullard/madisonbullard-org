@@ -1,6 +1,20 @@
 import * as paper from "paper";
+import getRandomFromMinMax from "../utils/getRandomFromMinMax";
 
-function metaball() {
+function metaball(
+  ballPositions: paper.Point[],
+  {
+    radius,
+    handleLengthRate,
+    v,
+    maxDistance,
+  }: {
+    radius: number;
+    handleLengthRate: number;
+    v: number;
+    maxDistance: number;
+  }
+) {
   // Ported from original Metaball script by SATO Hiroyuki
   // http://park12.wakwak.com/~shp/lc/et/en_aics_script.html
 
@@ -9,30 +23,16 @@ function metaball() {
     fillColor: new paper.Color(0, 0, 0),
   };
 
-  const ballPositions = [
-    [255, 129],
-    [610, 73],
-    [486, 363],
-    [117, 459],
-    [484, 726],
-    [843, 306],
-    [789, 615],
-    [1049, 82],
-    [1292, 428],
-    [1117, 733],
-    [1352, 86],
-    [92, 798],
-  ];
-
-  const handle_len_rate = 2.45;
   const circlePaths: paper.Path.Circle[] = [];
-  const radius = 50;
   for (let i = 0, l = ballPositions.length; i < l; i++) {
-    const circlePath = new paper.Path.Circle({
-      center: ballPositions[i],
-      radius,
-    });
-    circlePaths.push(circlePath);
+    const ballPoint = ballPositions[i];
+    if (ballPoint) {
+      const circlePath = new paper.Path.Circle({
+        center: [ballPoint.x, ballPoint.y],
+        radius: getRandomFromMinMax(0.2 * radius, 1.8 * radius),
+      });
+      circlePaths.push(circlePath);
+    }
   }
 
   const largeCircle = new paper.Path.Circle({
@@ -60,7 +60,13 @@ function metaball() {
         const path2 = paths[j];
 
         if (path1 && path2) {
-          const path = getMetaball(path1, path2, 0.5, handle_len_rate, 300);
+          const path = getMetaball(
+            path1,
+            path2,
+            v,
+            handleLengthRate,
+            maxDistance
+          );
           if (path) {
             connections.addChild(path);
             path.removeOnMove();
@@ -77,7 +83,7 @@ function getMetaball(
   ball1: paper.Path.Circle,
   ball2: paper.Path.Circle,
   v: number,
-  handle_len_rate: number,
+  handleLengthRate: number,
   maxDistance: number
 ) {
   const center1 = ball1.position;
@@ -122,7 +128,7 @@ function getMetaball(
   // both ends of the curve to draw
   const totalRadius = radius1 + radius2;
   let d2 = Math.min(
-    v * handle_len_rate,
+    v * handleLengthRate,
     p1a.subtract(p2a).length / totalRadius
   );
 

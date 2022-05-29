@@ -10,18 +10,16 @@ const app = document.querySelector<HTMLDivElement>("#app");
 
 setupPaper(app);
 
-metaball();
-
 const text = paper.project.importSVG(svg);
 text.position = new paper.Point(400, 400);
-const points = getGridPointsWithinItem(text, 4);
 
-points.forEach((point) => {
-  new paper.Path.Circle({
-    center: [point.x, point.y],
-    radius: 1,
-    fillColor: new paper.Color(255, 255, 0),
-  });
+const points = getGridPointsWithinItem(text, 9);
+
+metaball(points, {
+  radius: 2,
+  handleLengthRate: 0.4,
+  v: 2,
+  maxDistance: 2,
 });
 
 text.visible = false;
