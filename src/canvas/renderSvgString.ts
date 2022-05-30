@@ -1,5 +1,5 @@
 import * as paper from "paper";
 
-export function renderSvg(svgString: string) {
+export function renderSvgString(svgString: string) {
   return paper.project.importSVG(svgString);
 }
