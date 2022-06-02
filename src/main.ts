@@ -1,15 +1,20 @@
 import "./style.css";
 
+import { Composite } from "matter-js";
 import * as paper from "paper";
 
-import { svgString } from "./canvas/assets/madisonbullard.svg";
-import { getRecursiveIterator } from "./canvas/getRecursiveIterator";
-import { renderSvgString } from "./canvas/renderSvgString";
+import { pathString } from "./canvas/assets/madisonbullard.path";
+import { createMatterEngine } from "./canvas/createMatterEngine";
+import { createMouseTrackerBody } from "./canvas/createMouseTrackerBody";
+import { makeWobbly } from "./canvas/makeWobbly";
+import { setupMatter } from "./canvas/setupMatter";
 import { setupPaper } from "./canvas/setupPaper";
-
+import { getRecursiveIterator } from "./getRecursiveIterator";
 const appDiv = document.querySelector<HTMLDivElement>("#app");
 
 setupPaper(appDiv);
+const matterDiv = setupMatter(appDiv);
+const { render, world } = createMatterEngine(matterDiv);
 
 const { width, height } = paper.view.bounds;
 
@@ -21,7 +26,8 @@ rect.center = paper.view.center;
 
 const fullScreenRect = new paper.Path.Rectangle(rect);
 
-const text = renderSvgString(svgString);
+const text = new paper.CompoundPath(pathString);
+text.fillRule = "evenodd";
 const {
   viewSize: { width: viewWidth },
 } = paper.view;
@@ -32,12 +38,10 @@ text.scale(DESIRED_TEXT_WIDTH / text.bounds.width);
 
 text.position = paper.view.center;
 
-const scene = fullScreenRect.subtract(
-  text.lastChild.lastChild as paper.CompoundPath
-);
+const scene = fullScreenRect.subtract(text);
 text.remove();
 
-const depth = 2;
+const depth = 5;
 
 const backgroundHexColor = "#FAFFEA";
 const hueOffset = 100;
@@ -70,6 +74,8 @@ scene.strokeColor = new paper.Color(
 scene.strokeWidth = strokeWidth;
 scene.strokeJoin = strokeJoin;
 
+const renderLoops: (() => void)[] = [];
+
 const iterate = getRecursiveIterator<paper.PathItem>((_scene, i) => {
   const copy = _scene.clone();
 
@@ -100,13 +106,31 @@ const iterate = getRecursiveIterator<paper.PathItem>((_scene, i) => {
   );
   copy.strokeWidth = strokeWidth;
   copy.strokeJoin = strokeJoin;
-
   copy.sendToBack();
+
+  const stiffnessMin = 0.0;
+  const stiffnessMax = 1;
+  const stiffnessRange = stiffnessMax - stiffnessMin;
+
+  const { renderLoop, composite } = makeWobbly(copy, {
+    stiffness: stiffnessMin + ((depth - i) / (depth - 1)) * stiffnessRange,
+  });
+  renderLoops.push(renderLoop);
+  Composite.add(world, composite);
 
   return copy;
 });
 
 iterate(scene, depth);
-
 fullScreenRect.sendToBack();
 fullScreenRect.fillColor = new paper.Color(backgroundHexColor);
+
+const cursorLoop = createMouseTrackerBody(world, render);
+renderLoops.push(cursorLoop);
+
+function renderLoop() {
+  renderLoops.forEach((loop) => loop());
+  window.requestAnimationFrame(renderLoop);
+}
+
+renderLoop();

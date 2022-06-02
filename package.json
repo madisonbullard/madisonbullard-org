@@ -16,6 +16,7 @@
   "license": "ISC",
   "packageManager": "pnpm@7.1.6",
   "devDependencies": {
+    "@types/matter-js": "^0.17.7",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
@@ -28,6 +29,7 @@
     "vite-plugin-eslint": "^1.6.1"
   },
   "dependencies": {
+    "matter-js": "^0.18.0",
     "paper": "^0.12.15"
   }
 }
