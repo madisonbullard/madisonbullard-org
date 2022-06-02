@@ -3,7 +3,7 @@ import "./style.css";
 import { Composite } from "matter-js";
 import * as paper from "paper";
 
-import { pathString } from "./canvas/assets/madisonbullard.path";
+import { pathString } from "./canvas/assets/rubikMonoOne.path";
 import { createMatterEngine } from "./canvas/createMatterEngine";
 import { createMouseTrackerBody } from "./canvas/createMouseTrackerBody";
 import { makeWobbly } from "./canvas/makeWobbly";
@@ -41,14 +41,12 @@ text.position = paper.view.center;
 const scene = fullScreenRect.subtract(text);
 text.remove();
 
-const depth = 5;
+const depth = 8;
 
 const backgroundHexColor = "#FAFFEA";
 const hueOffset = 100;
 
 scene.fillColor = new paper.Color(backgroundHexColor);
-scene.shadowBlur = viewWidth / 80;
-scene.shadowOffset = new paper.Point(-2, 3);
 
 const topGradient = new paper.Gradient();
 const hueAngle = (0 * 0.4 * 360 + hueOffset) % 360;
@@ -56,6 +54,8 @@ const strokeWidth = 2;
 const strokeJoin = "round";
 
 scene.shadowColor = new paper.Color(`hsla(${hueAngle}, 80%, 20%, 0.1)`);
+scene.shadowBlur = viewWidth / 80;
+scene.shadowOffset = new paper.Point(-2, 3);
 
 topGradient.stops = [
   // @ts-ignore
@@ -86,9 +86,9 @@ const iterate = getRecursiveIterator<paper.PathItem>((_scene, i) => {
 
   copy.scale(0.989);
 
-  copy.shadowBlur = viewWidth / 80;
-  copy.shadowOffset = new paper.Point(-2, 3);
-  copy.shadowColor = new paper.Color(`hsla(${hueAngle}, 100%, 20%, 0.1)`);
+  // copy.shadowBlur = viewWidth / 80;
+  // copy.shadowOffset = new paper.Point(-2, 3);
+  // copy.shadowColor = new paper.Color(`hsla(${hueAngle}, 100%, 20%, 0.1)`);
 
   strokeGradient.stops = [
     // @ts-ignore
@@ -108,12 +108,13 @@ const iterate = getRecursiveIterator<paper.PathItem>((_scene, i) => {
   copy.strokeJoin = strokeJoin;
   copy.sendToBack();
 
-  const stiffnessMin = 0.0;
+  const stiffnessMin = 0.8;
   const stiffnessMax = 1;
   const stiffnessRange = stiffnessMax - stiffnessMin;
-
+  const percentOfTheWayThroughTheLoop = (depth - i) / (depth - 1);
   const { renderLoop, composite } = makeWobbly(copy, {
-    stiffness: stiffnessMin + ((depth - i) / (depth - 1)) * stiffnessRange,
+    stiffness: percentOfTheWayThroughTheLoop * stiffnessRange + stiffnessMin,
+    restitution: 0.01,
   });
   renderLoops.push(renderLoop);
   Composite.add(world, composite);
@@ -122,6 +123,7 @@ const iterate = getRecursiveIterator<paper.PathItem>((_scene, i) => {
 });
 
 iterate(scene, depth);
+// scene.visible = false;
 fullScreenRect.sendToBack();
 fullScreenRect.fillColor = new paper.Color(backgroundHexColor);
 
