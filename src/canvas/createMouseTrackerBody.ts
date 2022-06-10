@@ -9,7 +9,6 @@ export function createMouseTrackerBody(
 
   const cursor = Bodies.circle(-300, -300, radius, {
     isStatic: false,
-    // restitution: 0.9,
     density: 0.2,
   });
   Composite.add(world, cursor);
