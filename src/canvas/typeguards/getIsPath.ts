@@ -1,3 +1,8 @@
-export function getIsPath(item: paper.Item): item is paper.Path {
-  return "segments" in item;
+export function getIsPath(
+  item: paper.Item | null | undefined
+): item is paper.Path {
+  if (!item) {
+    return false;
+  }
+  return "area" in item;
 }

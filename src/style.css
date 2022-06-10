@@ -2,10 +2,13 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  width: 100vw;
   height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 body {
@@ -13,17 +16,7 @@ body {
   padding: 0;
 }
 
-canvas {
-  width: 100vw;
-  height: 100vh;
-}
-
 #matter {
   opacity: 0;
-}
-
-#paper {
-  pointer-events: none;
-  position: fixed;
-  left: 0;
+  position: absolute;
 }
